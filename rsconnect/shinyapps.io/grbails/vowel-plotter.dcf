@@ -1,0 +1,14 @@
+name: vowel-plotter
+title: vowel-plotter
+username:
+account: grbails
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5685290
+bundleId: 5601677
+url: https://grbails.shinyapps.io/vowel-plotter/
+when: 1645443156.13953
+lastSyncTime: 1645443156.13954
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: sample_vowels.csv|www/.DS_Store|www/mvp_logo_old.png
