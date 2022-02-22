@@ -5,10 +5,10 @@ account: grbails
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5685290
-bundleId: 5601677
+bundleId: 5605185
 url: https://grbails.shinyapps.io/vowel-plotter/
-when: 1645443156.13953
-lastSyncTime: 1645443156.13954
+when: 1645529487.66608
+lastSyncTime: 1645529487.66611
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: sample_vowels.csv|www/.DS_Store|www/mvp_logo_old.png
+ignoredFiles: mvp_logo.psd|README.md|sample_vowels_2.csv|sample_vowels.csv|www/.DS_Store|www/demo_screenshot.png|www/mvp_logo_old.png

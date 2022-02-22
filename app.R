@@ -1,3 +1,6 @@
+options(shiny.maxRequestSize=30*1024^2) #increase size limit of uploaded files to 30MB
+
+#load packages
 library(shiny)
 library(tidyverse)
 library(DT)
@@ -7,7 +10,7 @@ library(shinyjs)
 library(ggdark)
 library(scales)
 
-
+#function for calculating mean of F1/F2
 calculateMeans <- function(input_data, input_facet) {
   if (input_facet == 'none') {
     input_data %>%
@@ -20,9 +23,6 @@ calculateMeans <- function(input_data, input_facet) {
   }
 }
 
-cleanTable <- function(input_table) {
-  input_table
-}
 
 ############# UI #############
 
@@ -252,7 +252,7 @@ server <- function(input, output, session) {
   })
   output$meanSize <- renderUI({
     if (input$includeMeans != 'none') {
-      sliderInput('meanSize', "Size of mean labels", 5, 30, value = 10, step = 5, ticks = F)
+      sliderInput('meanSize', "Size of mean labels", 4, 30, value = 10, step = 2, ticks = F)
     }
   })
   output$ellipseAlpha <- renderUI({
@@ -274,7 +274,6 @@ server <- function(input, output, session) {
       
     }
   })
-  
   
   
   customPal <- reactive({
@@ -391,11 +390,22 @@ server <- function(input, output, session) {
         geom_text(aes(label = word), size = input$obsSize, alpha = input$obsAlpha)
     }
     
+    #plotting ellipses
+    if (input$includeEllipse == 'none') {
+      plotV2 <- plotV1
+    } else if (input$includeEllipse == 'ellipse') {
+      plotV2 <- plotV1 +
+        stat_ellipse(geom = 'polygon', aes(fill = vowel), 
+                     alpha = ifelse(is.null(input$ellipseAlpha), 0.2, input$ellipseAlpha), 
+                     show.legend = F) #+
+      #scale_fill_manual(guide = 'none', values = alpha(customPal(), input$ellipseAlpha))
+    }
+    
     #plotting means
     if (input$includeMeans == 'none') {
-      plotV2 <- plotV1
+      plotV3 <- plotV2
     } else if (input$includeMeans == 'points') {
-      plotV2 <- plotV1 +
+      plotV3 <- plotV2 +
         geom_point(data = plotdata() %>% 
                      filter(vowel %in% input$vowelChoices) %>% 
                      calculateMeans(input$facetColumn),
@@ -404,27 +414,16 @@ server <- function(input, output, session) {
                    pch = 23,
                    show.legend = F)
     } else if (input$includeMeans == 'category labels') {
-      plotV2 <- plotV1 +
+      plotV3 <- plotV2 +
         geom_label(data = plotdata() %>% 
                      filter(vowel %in% input$vowelChoices) %>% 
                      calculateMeans(input$facetColumn),
-                   aes(meanF2, meanF1, label = vowel), fill = 'transparent', 
+                   aes(meanF2, meanF1, label = vowel), fill = 'white', 
                    size = ifelse(is.null(input$meanSize), 10, input$meanSize), 
                    show.legend = F)
     }
     
-    #plotting ellipses
-    if (input$includeEllipse == 'none') {
-      plotV3 <- plotV2
-    } else if (input$includeEllipse == 'ellipse') {
-      plotV3 <- plotV2 +
-        stat_ellipse(geom = 'polygon', aes(fill = vowel), 
-                     alpha = ifelse(is.null(input$ellipseAlpha), 0.2, input$ellipseAlpha), 
-                     show.legend = F) #+
-        #scale_fill_manual(guide = 'none', values = alpha(customPal(), input$ellipseAlpha))
-    }
-    
-    #plotting a facet
+        #plotting a facet
     if (input$facetColumn == 'none') {
       plotV4 <- plotV3
     } else {
@@ -468,8 +467,7 @@ server <- function(input, output, session) {
   
   #table panel
   output$table <- renderDataTable(
-    filedata() %>% 
-      cleanTable()
+    filedata()
     )
 
 }
