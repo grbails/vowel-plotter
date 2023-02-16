@@ -346,7 +346,7 @@ server <- function(input, output, session) {
     
     basePlot <- plotdata() %>%
       filter(vowel %in% input$vowelChoices) %>%
-      ggplot(aes(F2, F1, group = vowel, colour = vowel, fill = vowel)) +
+      ggplot(aes(F2, F1, group = as.factor(vowel), colour = as.factor(vowel), fill = as.factor(vowel))) +
       #ggplot(aes_string(x = input$F2Column, y = input$F1Column,
       #                  group = input$vowelColumn, colour = input$vowelColumn)) +
       scale_x_reverse(position = "top") +
@@ -395,7 +395,7 @@ server <- function(input, output, session) {
       plotV2 <- plotV1
     } else if (input$includeEllipse == 'ellipse') {
       plotV2 <- plotV1 +
-        stat_ellipse(geom = 'polygon', aes(fill = vowel), 
+        stat_ellipse(geom = 'polygon', aes(fill = as.factor(vowel)), 
                      alpha = ifelse(is.null(input$ellipseAlpha), 0.2, input$ellipseAlpha), 
                      show.legend = F) #+
       #scale_fill_manual(guide = 'none', values = alpha(customPal(), input$ellipseAlpha))
@@ -409,7 +409,7 @@ server <- function(input, output, session) {
         geom_point(data = plotdata() %>% 
                      filter(vowel %in% input$vowelChoices) %>% 
                      calculateMeans(input$facetColumn),
-                   aes(meanF2, meanF1, fill = vowel), colour = 'black', 
+                   aes(meanF2, meanF1, fill = as.factor(vowel)), colour = 'black', 
                    size = ifelse(is.null(input$meanSize), 10, input$meanSize), 
                    pch = 23,
                    show.legend = F)
