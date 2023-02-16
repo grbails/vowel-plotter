@@ -1,14 +1,24 @@
 options(shiny.maxRequestSize=30*1024^2) #increase size limit of uploaded files to 30MB
 
+#load/install packages
+if (!require('shiny')) install.packages('shiny'); library('shiny', quiet = T)
+if (!require('tidyverse')) install.packages('tidyverse'); library('tidyverse', quiet = T)
+if (!require('DT')) install.packages('DT'); library('DT', quiet = T)
+if (!require('RColorBrewer')) install.packages('RColorBrewer'); library('RColorBrewer', quiet = T)
+if (!require('viridis')) install.packages('viridis'); library('viridis', quiet = T)
+if (!require('shinyjs')) install.packages('shinyjs'); library('shinyjs', quiet = T)
+if (!require('ggdark')) install.packages('ggdark'); library('ggdark', quiet = T)
+if (!require('scales')) install.packages('scales'); library('scales', quiet = T)
+
 #load packages
-library(shiny)
-library(tidyverse)
-library(DT)
-library(RColorBrewer)
-library(viridis)
-library(shinyjs)
-library(ggdark)
-library(scales)
+#library(shiny)
+#library(tidyverse)
+#library(DT)
+#library(RColorBrewer)
+#library(viridis)
+#library(shinyjs)
+#library(ggdark)
+#library(scales)
 
 #function for calculating mean of F1/F2
 calculateMeans <- function(input_data, input_facet) {
